@@ -1,10 +1,10 @@
-package com.lhp.eventbussample;
+package com.lhp.eventbussample.message;
 
-public class EventMessage {
+public class UserInfo {
     public String name;
     public String password;
 
-    public EventMessage(String name,String password){
+    public UserInfo(String name, String password){
         this.name = name;
         this.password = password;
     }
