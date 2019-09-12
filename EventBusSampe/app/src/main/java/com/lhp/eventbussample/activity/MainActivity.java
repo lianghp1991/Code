@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.lhp.eventbussample.message.UserInfo;
 import com.lhp.eventbussample.R;
-import com.lhp.eventbussample.TestUtils;
+import com.lhp.eventbussample.test.TestUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,12 +20,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TestUtils.getInstance(this).setNameAndPasswordInMainThread();
+        TestUtils.getInstance(this).setUserInfoInMainThread();
     }
 
     @Override
     protected void onStart() {
         EventBus.getDefault().register(this);
+//        TestUtils.getInstance(this).setUserInfoInSubThread();
         super.onStart();
     }
 
@@ -41,7 +42,19 @@ public class MainActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.tv_password)).setText(mUserInfo.password);
     }
     @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onMessageEventPost(UserInfo mUserInfo){
+    public void onMessageEventPosting(UserInfo mUserInfo){
         Log.d(TestUtils.TAG," Receive message in POSTING ThreadMode. name = "+ mUserInfo.name +" password = "+ mUserInfo.password);
+    }
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onMessageEventAsync(UserInfo mUserInfo){
+        Log.d(TestUtils.TAG," Receive message in ASYNC ThreadMode. name = "+ mUserInfo.name +" password = "+ mUserInfo.password);
+    }
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEventBackgroud(UserInfo mUserInfo){
+        Log.d(TestUtils.TAG," Receive message in BACKGROUD ThreadMode. name = "+ mUserInfo.name +" password = "+ mUserInfo.password);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    public void onMessageEventMainOrdered(UserInfo mUserInfo){
+        Log.d(TestUtils.TAG," Receive message in MAINORDERED ThreadMode. name = "+ mUserInfo.name +" password = "+ mUserInfo.password);
     }
 }
